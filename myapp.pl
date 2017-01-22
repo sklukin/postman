@@ -27,7 +27,7 @@ post '/send' => sub {
     return $c->reply->not_found unless $params{$p} = $c->param($p);
   }
 
-  return $c->reply->not_found if $c->app->confing->{secret} ne $params{secret};
+  return $c->reply->not_found if $c->app->config->{secret} ne $params{secret};
 
   eval {
     $c->mail(%params);
