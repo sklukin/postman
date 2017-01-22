@@ -20,12 +20,14 @@ get '/' => sub {
 post '/send' => sub {
   my $c = shift;
   my $error  = '';
-  my @params = (qw/to from subject data/);
+  my @params = (qw/to from subject data secret/);
   my %params;
 
   for my $p (@params) {
     return $c->reply->not_found unless $params{$p} = $c->param($p);
   }
+
+  return $c->reply->not_found if $c->app->confing->{secret} ne $params{secret};
 
   eval {
     $c->mail(%params);
