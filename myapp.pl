@@ -20,18 +20,26 @@ get '/' => sub {
 post '/send' => sub {
   my $c = shift;
   my $message = '';
+  my @params = (qw/to from subject data/);
+  my %params;
 
-  $c->reply->not_found unless my $msg = $c->param('msg');
+  for my $p (@params) {
+    return $c->reply->not_found unless $params{$p} = $c->param($p);
+  }
 
-  p $msg;
+  $c->mail(%params);
 
-  $c->mail(
-    to      => 'sklukin@yandex.ru',
-    subject => 'Hi',
-    data    => 'use Perl or die',
-  );
+  # $c->reply->not_found unless my $msg = $c->param('msg');
 
-  p $msg;
+  # p $msg;
+
+  # $c->mail(
+  #   to      => 'sklukin@yandex.ru',
+  #   subject => 'Hi',
+  #   data    => 'use Perl or die',
+  # );
+
+  # p $msg;
 
   # # $c->mail(mail => $msg);
   # # my @args = ('/usr/bin/sendmail', $msg;
